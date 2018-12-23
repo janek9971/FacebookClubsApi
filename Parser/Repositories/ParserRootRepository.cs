@@ -23,14 +23,13 @@ namespace Parser.Repositories
         {
             List<JToken> listJson = new List<JToken>();
             var listJsonString = new StringBuilder();
-            using (var driver = new ChromeDriver(@"C:\Users\JANEK\source\repos\FacebookClubsApi\packages\Selenium.WebDriver.ChromeDriver.2.45.0\driver\win32", _chromeDriverSetupRepository.SetupChromeDriver(), TimeSpan.FromSeconds(180)))
-            {
+            var driver = _chromeDriverSetupRepository.SetupChromeDriver();
                 driver.Navigate().GoToUrl("https://www.facebook.com/pg/klubhydrozagadka/events/");
                 driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMinutes(1);
 
                 _parseWebRepository.ParseWeb(driver, "hydro", ref listJson);
 
-            }
+    
 
             foreach (var item in listJson)
             {
