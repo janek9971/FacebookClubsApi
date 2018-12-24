@@ -104,7 +104,6 @@ namespace Parser.Repositories
             var strB = new List<string>();
             //divCount += 1;
             var elapse = 0L;
-            var elapseScroll = 0L;
 
             for (var i = 2; ;i++)
             {
@@ -124,16 +123,19 @@ namespace Parser.Repositories
                 try
                 {
                     sw.Restart();
+                    //var element = driver
+                    //    .FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}"));
+
                     var element = driver
-                        .FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}"));
-                   tableRow = element.Text;
-                   sw2.Restart();
+                        .FindElement(By.CssSelector($"#upcoming_events_card > div:nth-child(1) > div:nth-child({i}) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)"));
+                    //# upcoming_events_card > div:nth-child(1) > div:nth-child(7) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)
+                    tableRow = element.Text;
+          
                    if (i > 10 && i % 2 == 0)
                    {
                        driver.ExecuteScript("arguments[0].scrollIntoView(true);", element);
                    }
-                   sw2.Stop();
-                   elapseScroll = sw2.ElapsedMilliseconds;
+               
                     sw.Stop();
                    elapse += sw.ElapsedMilliseconds;
                 }
@@ -166,7 +168,6 @@ namespace Parser.Repositories
                 
             Console.WriteLine(strB);
        
-            Console.WriteLine(elapse);
             Console.WriteLine(elapse);
 
             return objects;

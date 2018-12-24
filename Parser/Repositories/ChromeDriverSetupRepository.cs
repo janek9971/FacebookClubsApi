@@ -12,7 +12,7 @@ namespace Parser.Repositories
         public ChromeDriver SetupChromeDriver()
         {
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("headless");
+          //  chromeOptions.AddArguments("headless");
             chromeOptions.AddArguments("--no-proxy-server");
             chromeOptions.AddArguments("--proxy-server='direct://'");
             chromeOptions.AddArguments("--proxy-bypass-list=*");

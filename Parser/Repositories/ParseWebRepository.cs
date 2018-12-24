@@ -64,7 +64,7 @@ namespace Parser.Repositories
 
                         //divCount = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Count + 1;
                         //list.Add(divCount);
-                        if (driver.FindElement(By.Id("upcoming_events_card")).FindElements(By.ClassName("_p6a")).Count == 0 && iterator2>1)
+                        if (driver.FindElement(By.Id("upcoming_events_card")).FindElements(By.ClassName("_p6a")).Count == 0 && iterator2>3)
                         {
                             driver.ExecuteScript($"window.scrollTo({0}, {x + iterator2 * 200+200})");
 
