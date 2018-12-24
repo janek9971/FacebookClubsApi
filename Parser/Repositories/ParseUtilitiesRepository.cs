@@ -100,12 +100,13 @@ namespace Parser.Repositories
             var xpathStringPart1 = "//*[@id='upcoming_events_card']/div/div[";
             var xPathStringPart2 = "/table/tbody/tr/td[";
             var strB = new List<string>();
-            for (var i = 0; i < divCount; i++)
+            divCount += 1;
+            for (var i = 2; i < divCount; i++)
             {
-                if (i == 0 || i == 1)
-                {
-                    continue;
-                }
+                //if (i == 0 || i == 1)
+                //{
+                //    continue;
+                //}
 
                 sw.Start();
                 var tableRow = driver.FindElement(By.XPath($"//*[@id='upcoming_events_card']/div/div[{i}]/table/tbody/tr")).Text;
@@ -157,7 +158,7 @@ namespace Parser.Repositories
                 //var x = ParseToDate(dateEvent, timeEvent);
             }
        
-            sw.Stop();
+                sw.Stop();
             Console.WriteLine(strB);
             var elapse = sw.ElapsedMilliseconds;
             Console.WriteLine(elapse);

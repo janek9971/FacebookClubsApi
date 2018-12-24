@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using ParserModel.Repositories;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
@@ -81,13 +82,15 @@ namespace Parser.Repositories
             ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
             driver.SwitchTo().Window(driver.WindowHandles.Last());
             driver.Navigate().GoToUrl(url);
-            var js = String.Format("window.scrollTo({0}, {1})", 0, 1000);
+            var js = String.Format("window.scrollTo({0}, {1})", 0, 1500);
             driver.ExecuteScript(js);
+            Task.Delay(100).Wait();
+
         }
-       
 
-            
 
-        
+
+
+
     }
 }
