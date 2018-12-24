@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Parser.Repositories;
+using ParserModel.Entities;
 using ParserModel.Repositories;
 
 namespace API.Configurations
@@ -14,7 +15,7 @@ namespace API.Configurations
         {
             services.AddScoped<IParserRootRepository, ParserRootRepository>();
             services.AddScoped<IParseUtilitiesRepository, ParseUtilitiesRepository>();
-
+            services.AddScoped<ConfigureConnections>();
             services.AddSingleton<IChromeDriverSetupRepository, ChromeDriverSetupRepository>();
             services.AddScoped<IParseWebRepository, ParseWebRepository>();
             return services;

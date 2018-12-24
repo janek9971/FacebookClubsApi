@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
 using ParserModel.Repositories;
 
 namespace Parser.Repositories
@@ -17,9 +18,10 @@ namespace Parser.Repositories
             chromeOptions.AddArguments("--proxy-bypass-list=*");
             chromeOptions.AddArgument("blink-settings=imagesEnabled=false");
             chromeOptions.AddArgument("--ignore-certificate-errors");
-            chromeOptions.AddArgument("--incognito");
+            //chromeOptions.AddArgument("--incognito");
             chromeOptions.AddArgument("--lang=pl-PL");
             chromeOptions.AddArgument("--no-sandbox");
+
             var timespan = TimeSpan.FromMinutes(3);
 
             var driver =

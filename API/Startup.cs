@@ -31,6 +31,7 @@ namespace API
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services
+                //.AddConnectionProvider(Configuration)
                 .ConfigureRepositories()
                 .AddSwaggerGen(c =>
                 {
@@ -57,7 +58,7 @@ namespace API
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseHttpStatusCodeExceptionMiddleware();
             }
             else
@@ -67,9 +68,9 @@ namespace API
             }
 
             app.UseMvc();
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+            //app.UseCookiePolicy();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Version: 1"); }

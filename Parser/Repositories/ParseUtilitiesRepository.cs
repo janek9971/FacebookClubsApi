@@ -5,7 +5,7 @@ using System.Linq;
 using ParserModel.Repositories;
 using static System.Int32;
 using static ParserModel.Models.DictionaryMonths;
-using ParserModel.Models;
+using ParserModel.Entities;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 using System.Diagnostics;
@@ -45,8 +45,8 @@ namespace Parser.Repositories
 
 
             var splitted = dayAndMonth.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            day = splitted[0];
-            month = splitted[1];
+            day = splitted[1];
+            month = splitted[0];
             monthInt = GetValueFromDateString(month);
 
 
@@ -93,12 +93,13 @@ namespace Parser.Repositories
             return timeDictionary;
         }
 
-        public List<Club> ItemClubs(ChromeDriver driver, int divCount)
+        public List<Events> ItemClubs(ChromeDriver driver, int divCount)
         {
             var sw = new Stopwatch();
-            var objects = new List<Club>();
+            var objects = new List<Events>();
             var xpathStringPart1 = "//*[@id='upcoming_events_card']/div/div[";
             var xPathStringPart2 = "/table/tbody/tr/td[";
+            var strB = new List<string>();
             for (var i = 0; i < divCount; i++)
             {
                 if (i == 0 || i == 1)
@@ -107,41 +108,59 @@ namespace Parser.Repositories
                 }
 
                 sw.Start();
+                var tableRow = driver.FindElement(By.XPath($"//*[@id='upcoming_events_card']/div/div[{i}]/table/tbody/tr")).Text;
+                var tableRowSplit = tableRow.Split("\r\n");
+                var dateEvent = tableRowSplit[0] + " " + tableRowSplit[1];
+                var titleEvent = tableRowSplit[2];
+                var info = tableRowSplit[3].Split("·");
+                var timeEvent = info[0];
+                var guestsEvent = info[1].Substring(info[1].IndexOfAny("0123456789".ToCharArray()));
+                var localizationEvent = tableRowSplit[4];
+                //foreach (var x in test.Split("\r\n"))
+                //{
+                //    Console.WriteLine(x);
+                //}
+                //strB.Add($"{test}\n");
+                //Console.WriteLine(test);
 
-                var dateEvent = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}1]/span/span[2]"))
-                                    .Text
-                                + " "
-                                + driver.FindElement(
-                                    By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}1]/span/span[1]")).Text;
+                //var dateEvent = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}1]/span/span[2]"))
+                //                    .Text
+                //                + " "
+                //                + driver.FindElement(
+                //                    By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}1]/span/span[1]")).Text;
 
-                var titleEvent = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[1]"))
-                    .Text;
+                //var titleEvent = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[1]"))
+                //    .Text;
 
-                var info = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[2]")).Text;
-                var timeEvent = driver
-                    .FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[2]/span[1]")).Text;
-                var subStrTrimmedDateEvent = info.Replace(timeEvent, "");
-                var guestsEvent =
-                    subStrTrimmedDateEvent.Substring(subStrTrimmedDateEvent.IndexOfAny("0123456789".ToCharArray()));
+                //var info = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[2]")).Text;
+                //var timeEvent = driver
+                //    .FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[2]/span[1]")).Text;
+                //var subStrTrimmedDateEvent = info.Replace(timeEvent, "");
+                //var guestsEvent =
+                //    subStrTrimmedDateEvent.Substring(subStrTrimmedDateEvent.IndexOfAny("0123456789".ToCharArray()));
 
-                var localizationEvent = driver
-                    .FindElement(By.XPath($"  {xpathStringPart1}{i}]{xPathStringPart2}3]/div/div[1]")).Text;
-                sw.Stop();
+                //var localizationEvent = driver
+                //    .FindElement(By.XPath($"  {xpathStringPart1}{i}]{xPathStringPart2}3]/div/div[1]")).Text;
+                //sw.Stop();
 
                 ParseToDate(dateEvent, timeEvent, out DateTime dateStart, out DateTime dateEnd);
-                objects.Add(new Club
+                objects.Add(new Events
                 {
                     DateStart = dateStart,
                     DateEnd = dateEnd,
                     Title = titleEvent,
-                    Guests = new string(guestsEvent.Where(char.IsDigit).ToArray()),
+                    Guests = Parse(new string(guestsEvent.Where(char.IsDigit).ToArray())),
                     Localization = localizationEvent
                 });
                 //Console.WriteLine(_driver.FindElement(By.XPath($"//*[@id='upcoming_events_card']/div/div[{i}]/table/tbody/tr/td[2]/div/div[2]/span[1]")).Text);
 
-                //var x =   ParseToDate(dateEvent, timeEvent);
+                //var x = ParseToDate(dateEvent, timeEvent);
             }
-
+       
+            sw.Stop();
+            Console.WriteLine(strB);
+            var elapse = sw.ElapsedMilliseconds;
+            Console.WriteLine(elapse);
             return objects;
         }
 
