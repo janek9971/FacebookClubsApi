@@ -32,8 +32,8 @@ namespace Parser.Repositories
             var driver = _chromeDriverSetupRepository.SetupChromeDriver();
 
 
-            var js = String.Format("window.scrollTo({0}, {1})", 0, 1000);
-            driver.ExecuteScript(js);
+            //var js = String.Format("window.scrollTo({0}, {1})", 0, 1000);
+            //driver.ExecuteScript(js);
             driver.Navigate().GoToUrl("https://www.facebook.com/pg/klubremont/events/");
             //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMinutes(1);
           
@@ -51,23 +51,27 @@ namespace Parser.Repositories
                 sw.Stop();
                 elapsed.Add(sw.ElapsedMilliseconds);
             }
+            driver.Close();
+            
             Console.WriteLine(elapsed);
-            sw.Start();
-            _parseWebRepository.ParseWeb(driver, "remont", ref listJson);
-            sw.Stop();
-            var time1 = sw.ElapsedMilliseconds;
+     
 
-            sw.Reset();
-            driver.SwitchTo().Window(driver.WindowHandles.Last());
+            //sw.Start();
+            //_parseWebRepository.ParseWeb(driver, "remont", ref listJson);
+            //sw.Stop();
+            //var time1 = sw.ElapsedMilliseconds;
 
-            //driver.Navigate().GoToUrl("https://www.facebook.com/pg/klub.stodola/events/");
+            //sw.Reset();
+            //driver.SwitchTo().Window(driver.WindowHandles.Last());
 
-            sw.Start();
-            _parseWebRepository.ParseWeb(driver, "stodola", ref listJson);
-            sw.Stop();
-            var time2 = sw.ElapsedMilliseconds;
+            ////driver.Navigate().GoToUrl("https://www.facebook.com/pg/klub.stodola/events/");
 
-            Console.WriteLine($"Czas1= {time1}    Czas2= {time2}");
+            //sw.Start();
+            //_parseWebRepository.ParseWeb(driver, "stodola", ref listJson);
+            //sw.Stop();
+            //var time2 = sw.ElapsedMilliseconds;
+
+            //Console.WriteLine($"Czas1= {time1}    Czas2= {time2}");
 
             foreach (var item in listJson)
             {
@@ -82,9 +86,9 @@ namespace Parser.Repositories
             ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
             driver.SwitchTo().Window(driver.WindowHandles.Last());
             driver.Navigate().GoToUrl(url);
-            var js = String.Format("window.scrollTo({0}, {1})", 0, 1500);
+            var js = $"window.scrollTo({0}, {1500})";
             driver.ExecuteScript(js);
-            Task.Delay(100).Wait();
+            //Task.Delay(100).Wait();
 
         }
 

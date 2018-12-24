@@ -8,6 +8,7 @@ using  Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using OpenQA.Selenium.Interactions;
 
@@ -26,33 +27,28 @@ namespace Parser.Repositories
            
             Console.WriteLine(path);
             //var x = false;
-            var errorIterate = 0;
             var time = 1;
-            int divCount=0;
-            var list = new List<int>();
             var newSw = new Stopwatch();
             newSw.Start();
-            var flag0 = true;
+            //var flag0 = true;
             var iterator2 = 0;
-            while (flag0)
+            while (true)
             {
                 //Console.WriteLine(time);
                 try
                 {
                     Console.WriteLine(time);
 
-                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(time);
-                    var upcomingEventsIsLoaded =
-                        driver.FindElement(By.XPath(" //*[@id='upcoming_events_card']/div/div[2]")).Displayed;
+                    //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(time);
+                    //var upcomingEventsIsLoaded =
+                    //    driver.FindElement(By.XPath(" //*[@id='upcoming_events_card']/div/div[2]")).Displayed;
 
-                    if (!upcomingEventsIsLoaded) continue;
+                 
                     //var result = default(System.Collections.ObjectModel.ReadOnlyCollection<IWebElement>);
-                    var iterator = 2;
                     //try
                     //{
-                    var scrollIterate = 1200;
                     var lastEvents = driver.FindElement(By.XPath("//*[@id='past_events_card']/div/div[1]/div"));
-                    
+                    if (!lastEvents.Displayed) continue;
                     //*[@id="upcoming_events_card"]/div/div[8]   
                     driver.ExecuteScript("arguments[0].scrollIntoView(true);", lastEvents);
 
@@ -60,65 +56,44 @@ namespace Parser.Repositories
                     //[0].getAttribute("aria-ValueText");
                     var x = lastEvents.Location.Y;
                     driver.ExecuteScript($"window.scrollTo({0}, {x-200})");
-               
-                    string xd = string.Empty;
+                    x = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Last().Location.Y;
+
                     while (true)
                     {
-                        driver.ExecuteScript("arguments[0].scrollIntoView(true);", lastEvents);
-                        x = lastEvents.Location.Y;
-                        driver.ExecuteScript($"window.scrollTo({0}, {x - 200})");
-                        if (driver.FindElement(By.Id("upcoming_events_card")).FindElements(By.ClassName("_p6a")).Count == 0 && iterator2>3)
+                        driver.ExecuteScript($"window.scrollTo({0}, {x})");
+
+                        //divCount = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Count + 1;
+                        //list.Add(divCount);
+                        if (driver.FindElement(By.Id("upcoming_events_card")).FindElements(By.ClassName("_p6a")).Count == 0 && iterator2>1)
                         {
+                            driver.ExecuteScript($"window.scrollTo({0}, {x + iterator2 * 200+200})");
+
                             //xd = driver.FindElement(By.Id("upcoming_events_card")).FindElements(By.ClassName("_p6a"))
                             //    .Count.ToString();
+                            //driver.ExecuteScript("arguments[0].scrollIntoView(true);", lastEvents);
+                            //x = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Last().Location.Y;
+                            //driver.ExecuteScript($"window.scrollTo({0}, {x})");
+
+                            //divCount = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Count + 1;
+
                             break;
                         }
                         iterator2++;
-                        if (iterator2 > 10)
+                        if (iterator2 > 8)
                         {
                             break;
                         }
                         //*[@id="upcoming_events_card"]/div/div[8]/span
+                        //x = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Last().Location.Y;
+                        driver.ExecuteScript($"window.scrollTo({0}, {x+iterator2*200})");
 
-                        driver.ExecuteScript("arguments[0].scrollIntoView(true);", lastEvents);
-                        x = lastEvents.Location.Y;
-                        driver.ExecuteScript($"window.scrollTo({0}, {x - 200})");
-                        Task.Delay(75).Wait();
 
 
 
                     }
 
-                    //if (driver.FindElement(By.ClassName("//_p6b img _55ym _55yq _55yo")).Displayed)
-                    //{
-                    //    Console.WriteLine(driver.FindElement(By.ClassName("//_p6b img _55ym _55yq _55yo")).Text);
-                    //}
-                    //while (driver.FindElement(By.ClassName("//_p6b img _55ym _55yq _55yo")).Displayed)
-                    //{
-
-                    //}
-
-                    //driver.ExecuteScript("arguments[0].scrollIntoView(true);", lastEvents);
-                    //x = lastEvents.Location.Y;
-                    //driver.ExecuteScript($"window.scrollTo({0}, {x - 200})");
-                    //driver.ExecuteScript("arguments[0].scrollIntoView(true);", lastEvents);
-                    //Task.Delay(200).Wait();
-                    //driver.ExecuteScript($"window.scrollTo({0}, {x - 200})");
-                    //driver.ExecuteScript("arguments[0].scrollIntoView(true);", lastEvents);
-                    //Task.Delay(200).Wait();
-
-                    //*[@id="upcoming_events_card"]
-                    driver.ExecuteScript("arguments[0].scrollIntoView(true);", lastEvents);
-                    x = lastEvents.Location.Y;
-                    driver.ExecuteScript($"window.scrollTo({0}, {x - 200})");
-                    driver.ExecuteScript($"window.scrollTo({0}, {x})");
-                    Task.Delay(150).Wait();
-                   driver.ExecuteScript($"window.scrollTo({0}, {x-100})");
-                   Task.Delay(150).Wait();
-
-                    divCount = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Count+1;
-                    //   divCount = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div")).Count;
-                    Console.WriteLine(xd);
+                 
+                    //Console.WriteLine(xd);
                     break;
                     //while (true)
                     //    {
@@ -208,7 +183,7 @@ namespace Parser.Repositories
             var parseWebTime = newSw.ElapsedMilliseconds;
  
             var sw = new Stopwatch();
-
+            var divCount = 1;
             if (divCount > 0)
             {
                 sw.Start();
@@ -217,11 +192,12 @@ namespace Parser.Repositories
                 //    DateTimeZoneHandling = DateTimeZoneHandling.Local
                 //};
                 JObject jsonClubs = new JObject();
-              
+
                 //JsonConvert.DefaultSettings = () => new JsonSerializerSettings
                 //{
                 //    DateTimeZoneHandling = DateTimeZoneHandling.Local
                 //};
+                divCount = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Count + 1;
                 jsonClubs[$"Events{path}"] = JToken.FromObject(_parseUtilitiesRepository.ItemClubs(driver, divCount));
                 sw.Stop();
                 //File.WriteAllText($@"\Users\JANEK\Desktop\Strona\helloworld{path}Lista.txt", jsonClubs.ToString());

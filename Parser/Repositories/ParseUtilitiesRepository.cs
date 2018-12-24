@@ -9,6 +9,7 @@ using ParserModel.Entities;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Parser.Repositories
 {
@@ -96,20 +97,51 @@ namespace Parser.Repositories
         public List<Events> ItemClubs(ChromeDriver driver, int divCount)
         {
             var sw = new Stopwatch();
+            var sw2 = new Stopwatch();;
             var objects = new List<Events>();
             var xpathStringPart1 = "//*[@id='upcoming_events_card']/div/div[";
-            var xPathStringPart2 = "/table/tbody/tr/td[";
+            var xPathStringPart2 = "/table/tbody/tr";
             var strB = new List<string>();
-            divCount += 1;
-            for (var i = 2; i < divCount; i++)
+            //divCount += 1;
+            var elapse = 0L;
+            var elapseScroll = 0L;
+
+            for (var i = 2; ;i++)
             {
                 //if (i == 0 || i == 1)
                 //{
                 //    continue;
                 //}
+                //if (divCount > 10 && divCount % 2 == 0)
+                //{
+                //    //Thread.Sleep(20);
+                //    //divCount = driver.FindElements(By.XPath($"//*[@id='upcoming_events_card']/div/div/table")).Count +
+                //    //           2;
+                //}
 
-                sw.Start();
-                var tableRow = driver.FindElement(By.XPath($"//*[@id='upcoming_events_card']/div/div[{i}]/table/tbody/tr")).Text;
+                string tableRow;
+             
+                try
+                {
+                    sw.Restart();
+                    var element = driver
+                        .FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}"));
+                   tableRow = element.Text;
+                   sw2.Restart();
+                   if (i > 10 && i % 2 == 0)
+                   {
+                       driver.ExecuteScript("arguments[0].scrollIntoView(true);", element);
+                   }
+                   sw2.Stop();
+                   elapseScroll = sw2.ElapsedMilliseconds;
+                    sw.Stop();
+                   elapse += sw.ElapsedMilliseconds;
+                }
+                catch (NoSuchElementException)
+                {
+                    break;
+                }
+               
                 var tableRowSplit = tableRow.Split("\r\n");
                 var dateEvent = tableRowSplit[0] + " " + tableRowSplit[1];
                 var titleEvent = tableRowSplit[2];
@@ -117,32 +149,7 @@ namespace Parser.Repositories
                 var timeEvent = info[0];
                 var guestsEvent = info[1].Substring(info[1].IndexOfAny("0123456789".ToCharArray()));
                 var localizationEvent = tableRowSplit[4];
-                //foreach (var x in test.Split("\r\n"))
-                //{
-                //    Console.WriteLine(x);
-                //}
-                //strB.Add($"{test}\n");
-                //Console.WriteLine(test);
-
-                //var dateEvent = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}1]/span/span[2]"))
-                //                    .Text
-                //                + " "
-                //                + driver.FindElement(
-                //                    By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}1]/span/span[1]")).Text;
-
-                //var titleEvent = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[1]"))
-                //    .Text;
-
-                //var info = driver.FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[2]")).Text;
-                //var timeEvent = driver
-                //    .FindElement(By.XPath($"{xpathStringPart1}{i}]{xPathStringPart2}2]/div/div[2]/span[1]")).Text;
-                //var subStrTrimmedDateEvent = info.Replace(timeEvent, "");
-                //var guestsEvent =
-                //    subStrTrimmedDateEvent.Substring(subStrTrimmedDateEvent.IndexOfAny("0123456789".ToCharArray()));
-
-                //var localizationEvent = driver
-                //    .FindElement(By.XPath($"  {xpathStringPart1}{i}]{xPathStringPart2}3]/div/div[1]")).Text;
-                //sw.Stop();
+            
 
                 ParseToDate(dateEvent, timeEvent, out DateTime dateStart, out DateTime dateEnd);
                 objects.Add(new Events
@@ -153,15 +160,15 @@ namespace Parser.Repositories
                     Guests = Parse(new string(guestsEvent.Where(char.IsDigit).ToArray())),
                     Localization = localizationEvent
                 });
-                //Console.WriteLine(_driver.FindElement(By.XPath($"//*[@id='upcoming_events_card']/div/div[{i}]/table/tbody/tr/td[2]/div/div[2]/span[1]")).Text);
-
-                //var x = ParseToDate(dateEvent, timeEvent);
+             
             }
        
-                sw.Stop();
+                
             Console.WriteLine(strB);
-            var elapse = sw.ElapsedMilliseconds;
+       
             Console.WriteLine(elapse);
+            Console.WriteLine(elapse);
+
             return objects;
         }
 
