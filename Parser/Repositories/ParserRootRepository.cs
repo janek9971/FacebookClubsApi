@@ -30,10 +30,11 @@ namespace Parser.Repositories
             List<JToken> listJson = new List<JToken>();
             var listJsonString = new StringBuilder();
             var driver = _chromeDriverSetupRepository.SetupChromeDriver();
-
+            var elapsed = new List<long>();
 
             //var js = String.Format("window.scrollTo({0}, {1})", 0, 1000);
             //driver.ExecuteScript(js);
+            sw.Restart();
             driver.Navigate().GoToUrl("https://www.facebook.com/pg/klubremont/events/");
             //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMinutes(1);
           
@@ -41,19 +42,22 @@ namespace Parser.Repositories
             goToNewTabAndLoad(driver, "https://www.facebook.com/pg/klubhydrozagadka/events/");
 
 
-            var elapsed = new List<long>();
+         
             //driver.SwitchTo().Window(driver.WindowHandles.First());
             foreach (string defwindow in driver.WindowHandles)
             {
           var title = driver.SwitchTo().Window(defwindow).Title.Split(" ")[1];
-             sw.Restart();
+        
                 _parseWebRepository.ParseWeb(driver, title, ref listJson);
-                sw.Stop();
-                elapsed.Add(sw.ElapsedMilliseconds);
+               
             }
-            driver.Close();
-            
+            sw.Stop();
+            elapsed.Add(sw.ElapsedMilliseconds);
+
             Console.WriteLine(elapsed);
+            driver.Close();
+            driver.Quit();
+         
      
 
             //sw.Start();

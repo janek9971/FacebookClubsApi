@@ -12,7 +12,7 @@ namespace Parser.Repositories
         public ChromeDriver SetupChromeDriver()
         {
             var chromeOptions = new ChromeOptions();
-          //  chromeOptions.AddArguments("headless");
+            chromeOptions.AddArguments("headless");
             chromeOptions.AddArguments("--no-proxy-server");
             chromeOptions.AddArguments("--proxy-server='direct://'");
             chromeOptions.AddArguments("--proxy-bypass-list=*");
@@ -21,12 +21,16 @@ namespace Parser.Repositories
             //chromeOptions.AddArgument("--incognito");
             chromeOptions.AddArgument("--lang=pl-PL");
             chromeOptions.AddArgument("--no-sandbox");
+            //chromeOptions.AddAdditionalCapability(CapabilityType.SupportsWebStorage, true, true);
+            //chromeOptions.AddAdditionalCapability(CapabilityType.SupportsApplicationCache, true, true);
+            //chromeOptions.AddAdditionalCapability(CapabilityType.EnableProfiling, true, true);
+            //chromeOptions.AddAdditionalCapability(CapabilityType.IsJavaScriptEnabled, true, true);
 
             var timespan = TimeSpan.FromMinutes(3);
 
             var driver =
                 new ChromeDriver(
-                    @"C:\Users\JANEK\source\repos\FacebookClubsApi\packages\Selenium.WebDriver.ChromeDriver.2.45.0\driver\win32",
+                    @"C:\Users\JANEK\source\repos\FacebookClubsApi\Parser\bin\Debug\netcoreapp2.1",
                     chromeOptions, TimeSpan.FromSeconds(180));
 
 

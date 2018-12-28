@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{E89F5DA4-0682-4C67-9734-1CD26AF1322B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{E89F5DA4-0682-4C67-9734-1CD26AF1322B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csproj", "{263160A4-021A-4A5C-BE76-101C3B1DF205}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parser", "Parser\Parser.csproj", "{263160A4-021A-4A5C-BE76-101C3B1DF205}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserModel", "ParserModel\ParserModel.csproj", "{F050AF22-A1EE-4E38-82A3-0DB4FFEADA44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParserModel", "ParserModel\ParserModel.csproj", "{F050AF22-A1EE-4E38-82A3-0DB4FFEADA44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{6EEF658D-DD85-47E2-B4E9-4D8AE591C8E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{F050AF22-A1EE-4E38-82A3-0DB4FFEADA44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F050AF22-A1EE-4E38-82A3-0DB4FFEADA44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F050AF22-A1EE-4E38-82A3-0DB4FFEADA44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EEF658D-DD85-47E2-B4E9-4D8AE591C8E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EEF658D-DD85-47E2-B4E9-4D8AE591C8E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EEF658D-DD85-47E2-B4E9-4D8AE591C8E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EEF658D-DD85-47E2-B4E9-4D8AE591C8E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
